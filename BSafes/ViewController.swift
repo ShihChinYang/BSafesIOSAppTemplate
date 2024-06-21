@@ -7,12 +7,14 @@
 
 import UIKit
 import WebKit
+import StoreKit
 
 class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
     
     var webView: WKWebView!
     var timer: Timer!
     var appLoaded: Bool = false
+    var pendingTransaction: Transaction? = nil
     
     @objc func fireTimer() {
         print("Timer fired!")
@@ -78,7 +80,34 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKSc
         
         if let action = dict["action"] {
             switch action {
-            
+            case "getAccessKey":
+                let localhostAccessKeyId = AccessKeyInfo.localhostAccessKeyId
+                let localhostAccessKey = AccessKeyInfo.localhostAccessKey
+                
+                let script = "window.bsafesNative.accessKeyWebCall({localhostAccessKeyId:\"\(localhostAccessKeyId)\", localhostAccessKey:\"\(localhostAccessKey)\"});"
+                
+                webView.evaluateJavaScript(script) { (result, error) in
+                    if let result = result {
+                        print("Label is updated with message: \(result)")
+                    } else if let error = error {
+                        print("An error occurred: \(error)")
+                    }
+                }
+            case "checkout":
+                 guard let planId = dict["planId"] else {
+                       return
+                 }
+                 print(planId)
+                 guard let appleClientSecret = dict["appleClientSecret"] else {
+                       return
+                 }
+                 print(appleClientSecret)
+                 checkout(planId, withSecret: appleClientSecret)
+            case "finishTransaction":
+                 print("finishTransaction")
+                 Task {
+                       await finishTransaction()
+                 }
             default:
                 print(action)
             }
@@ -95,6 +124,51 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKSc
             print("not a user link")
             decisionHandler(.allow)
             return
+        }
+    }
+    
+    private func checkout(_ productId: String, withSecret secret: String) {
+        let checkout = Checkout(forDelegate: self, forProduct: productId, withSecret: secret)
+        checkout.purchase()
+    }
+    
+    func handleCheckoutResult(_ transaction: Transaction?) {
+        var script: String
+        if let transaction {
+            print(transaction)
+            pendingTransaction = transaction
+            let purchaseTime = Int(transaction.purchaseDate.timeIntervalSince1970 * 1000);
+            print(purchaseTime);
+            script = "window.bsafesNative.transactionWebCall({status: \"ok\", transaction: { time: \(purchaseTime), id:\"\(transaction.id)\", originalId:\"\(transaction.originalID)\"}});"
+
+        } else {
+            script = "window.bsafesNative.transactionWebCall({status: \"error\"})"
+        }
+        webView.evaluateJavaScript(script) { (result, error) in
+           if let result = result {
+                print("Label is updated with message: \(result)")
+           } else if let error = error {
+                print("An error occurred: \(error)")
+           }
+        }
+    }
+    
+    func handleCheckoutError(_ result: String) {
+         let script = "window.bsafesNative.transactionWebCall({status: \"error\", error: \"\(result)\"})"
+         webView.evaluateJavaScript(script) { (result, error) in
+             if let result = result {
+                 print("Label is updated with message: \(result)")
+              } else if let error = error {
+                 print("An error occurred: \(error)")
+              }
+         }
+    }
+    
+    @MainActor
+    private func finishTransaction() async {
+        if let pendingTransaction {
+            await pendingTransaction.finish()
+            print("Transaction finished.")
         }
     }
 
