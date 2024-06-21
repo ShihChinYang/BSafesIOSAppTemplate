@@ -146,9 +146,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKSc
         }
         webView.evaluateJavaScript(script) { (result, error) in
            if let result = result {
-                print("Label is updated with message: \(result)")
+                print("Javascript retures: \(result)")
            } else if let error = error {
-                print("An error occurred: \(error)")
+                print("A javascript error occurred: \(error)")
            }
         }
     }
@@ -157,9 +157,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKSc
          let script = "window.bsafesNative.transactionWebCall({status: \"error\", error: \"\(result)\"})"
          webView.evaluateJavaScript(script) { (result, error) in
              if let result = result {
-                 print("Label is updated with message: \(result)")
+                 print("Javascript returns: \(result)")
               } else if let error = error {
-                 print("An error occurred: \(error)")
+                 print("An javascript error occurred: \(error)")
               }
          }
     }
