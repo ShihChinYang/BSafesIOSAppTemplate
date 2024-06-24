@@ -55,7 +55,7 @@
 /* Begin PBXFileReference section */
 		D55134EF2C25277600D31E28 /* CheckOut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckOut.swift; sourceTree = "<group>"; };
 		D55134F22C252B0E00D31E28 /* confidentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = confidentials.swift; sourceTree = "<group>"; };
-		D58E90CD2C23C3890017C57D /* BSafes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BSafes.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D58E90CD2C23C3890017C57D /* BSafesIOSAppTemplate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BSafesIOSAppTemplate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D58E90D02C23C3890017C57D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D58E90D22C23C3890017C57D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		D58E90D42C23C3890017C57D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,9 +63,9 @@
 		D58E90D92C23C38B0017C57D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D58E90DC2C23C38B0017C57D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D58E90DE2C23C38B0017C57D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D58E90E32C23C38C0017C57D /* BSafesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BSafesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D58E90E32C23C38C0017C57D /* BSafesIOSAppTemplateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BSafesIOSAppTemplateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D58E90E72C23C38C0017C57D /* BSafesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSafesTests.swift; sourceTree = "<group>"; };
-		D58E90ED2C23C38C0017C57D /* BSafesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BSafesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D58E90ED2C23C38C0017C57D /* BSafesIOSAppTemplateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BSafesIOSAppTemplateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D58E90F12C23C38C0017C57D /* BSafesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSafesUITests.swift; sourceTree = "<group>"; };
 		D58E90F32C23C38C0017C57D /* BSafesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BSafesUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		D58E91022C23C6EA0017C57D /* GCDWebServerFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDWebServerFunctions.h; sourceTree = "<group>"; };
@@ -152,9 +152,9 @@
 		D58E90CE2C23C3890017C57D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D58E90CD2C23C3890017C57D /* BSafes.app */,
-				D58E90E32C23C38C0017C57D /* BSafesTests.xctest */,
-				D58E90ED2C23C38C0017C57D /* BSafesUITests.xctest */,
+				D58E90CD2C23C3890017C57D /* BSafesIOSAppTemplate.app */,
+				D58E90E32C23C38C0017C57D /* BSafesIOSAppTemplateTests.xctest */,
+				D58E90ED2C23C38C0017C57D /* BSafesIOSAppTemplateUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -262,9 +262,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D58E90CC2C23C3890017C57D /* BSafes */ = {
+		D58E90CC2C23C3890017C57D /* BSafesIOSAppTemplate */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D58E90F72C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafes" */;
+			buildConfigurationList = D58E90F72C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesIOSAppTemplate" */;
 			buildPhases = (
 				D58E90C92C23C3890017C57D /* Sources */,
 				D58E90CA2C23C3890017C57D /* Frameworks */,
@@ -274,14 +274,14 @@
 			);
 			dependencies = (
 			);
-			name = BSafes;
+			name = BSafesIOSAppTemplate;
 			productName = BSafes;
-			productReference = D58E90CD2C23C3890017C57D /* BSafes.app */;
+			productReference = D58E90CD2C23C3890017C57D /* BSafesIOSAppTemplate.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D58E90E22C23C38C0017C57D /* BSafesTests */ = {
+		D58E90E22C23C38C0017C57D /* BSafesIOSAppTemplateTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D58E90FA2C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesTests" */;
+			buildConfigurationList = D58E90FA2C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesIOSAppTemplateTests" */;
 			buildPhases = (
 				D58E90DF2C23C38C0017C57D /* Sources */,
 				D58E90E02C23C38C0017C57D /* Frameworks */,
@@ -292,14 +292,14 @@
 			dependencies = (
 				D58E90E52C23C38C0017C57D /* PBXTargetDependency */,
 			);
-			name = BSafesTests;
+			name = BSafesIOSAppTemplateTests;
 			productName = BSafesTests;
-			productReference = D58E90E32C23C38C0017C57D /* BSafesTests.xctest */;
+			productReference = D58E90E32C23C38C0017C57D /* BSafesIOSAppTemplateTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D58E90EC2C23C38C0017C57D /* BSafesUITests */ = {
+		D58E90EC2C23C38C0017C57D /* BSafesIOSAppTemplateUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D58E90FD2C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesUITests" */;
+			buildConfigurationList = D58E90FD2C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesIOSAppTemplateUITests" */;
 			buildPhases = (
 				D58E90E92C23C38C0017C57D /* Sources */,
 				D58E90EA2C23C38C0017C57D /* Frameworks */,
@@ -310,9 +310,9 @@
 			dependencies = (
 				D58E90EF2C23C38C0017C57D /* PBXTargetDependency */,
 			);
-			name = BSafesUITests;
+			name = BSafesIOSAppTemplateUITests;
 			productName = BSafesUITests;
-			productReference = D58E90ED2C23C38C0017C57D /* BSafesUITests.xctest */;
+			productReference = D58E90ED2C23C38C0017C57D /* BSafesIOSAppTemplateUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -338,7 +338,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D58E90C82C23C3890017C57D /* Build configuration list for PBXProject "BSafes" */;
+			buildConfigurationList = D58E90C82C23C3890017C57D /* Build configuration list for PBXProject "BSafesIOSAppTemplate" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -351,9 +351,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D58E90CC2C23C3890017C57D /* BSafes */,
-				D58E90E22C23C38C0017C57D /* BSafesTests */,
-				D58E90EC2C23C38C0017C57D /* BSafesUITests */,
+				D58E90CC2C23C3890017C57D /* BSafesIOSAppTemplate */,
+				D58E90E22C23C38C0017C57D /* BSafesIOSAppTemplateTests */,
+				D58E90EC2C23C38C0017C57D /* BSafesIOSAppTemplateUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -434,12 +434,12 @@
 /* Begin PBXTargetDependency section */
 		D58E90E52C23C38C0017C57D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D58E90CC2C23C3890017C57D /* BSafes */;
+			target = D58E90CC2C23C3890017C57D /* BSafesIOSAppTemplate */;
 			targetProxy = D58E90E42C23C38C0017C57D /* PBXContainerItemProxy */;
 		};
 		D58E90EF2C23C38C0017C57D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D58E90CC2C23C3890017C57D /* BSafes */;
+			target = D58E90CC2C23C3890017C57D /* BSafesIOSAppTemplate */;
 			targetProxy = D58E90EE2C23C38C0017C57D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -658,7 +658,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BSafes.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BSafes";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BSafesIOSAppTemplate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BSafesIOSAppTemplate";
 			};
 			name = Debug;
 		};
@@ -677,7 +677,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BSafes.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BSafes";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BSafesIOSAppTemplate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BSafesIOSAppTemplate";
 			};
 			name = Release;
 		};
@@ -718,7 +718,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D58E90C82C23C3890017C57D /* Build configuration list for PBXProject "BSafes" */ = {
+		D58E90C82C23C3890017C57D /* Build configuration list for PBXProject "BSafesIOSAppTemplate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D58E90F52C23C38C0017C57D /* Debug */,
@@ -727,7 +727,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D58E90F72C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafes" */ = {
+		D58E90F72C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesIOSAppTemplate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D58E90F82C23C38C0017C57D /* Debug */,
@@ -736,7 +736,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D58E90FA2C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesTests" */ = {
+		D58E90FA2C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesIOSAppTemplateTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D58E90FB2C23C38C0017C57D /* Debug */,
@@ -745,7 +745,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D58E90FD2C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesUITests" */ = {
+		D58E90FD2C23C38C0017C57D /* Build configuration list for PBXNativeTarget "BSafesIOSAppTemplateUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D58E90FE2C23C38C0017C57D /* Debug */,

@@ -118,7 +118,19 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKSc
         if navigationAction.navigationType == .linkActivated  {
             if let url = navigationAction.request.url {
                 let path = url.path
-                
+                if path == "/external/payment" {
+                    let bsafesHost = "https://v2.bsafes.com"
+                    let externalURL = URL(string: "\(bsafesHost)/logIn?toPath=/services/payment")
+                    guard (externalURL != nil) else {
+                        return
+                    }
+                    UIApplication.shared.open(externalURL!)
+                    decisionHandler(.cancel)
+                    return
+                } else {
+                    decisionHandler(.allow)
+                    return
+                }
             }
         } else {
             print("not a user link")
