@@ -9,12 +9,25 @@ import UIKit
 import WebKit
 import StoreKit
 
-class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
+extension URL {
+    var typeIdentifier: String? {
+        return (try? resourceValues(forKeys: [.typeIdentifierKey]))?.typeIdentifier
+    }
+    var localizedName: String? {
+        return (try? resourceValues(forKeys: [.localizedNameKey]))?.localizedName
+    }
+}
+
+
+class ViewController: UIViewController, WKNavigationDelegate, WKDownloadDelegate, WKUIDelegate, WKScriptMessageHandler, UIDocumentInteractionControllerDelegate {
     
     var webView: WKWebView!
+    var localHost: String!
     var timer: Timer!
     var appLoaded: Bool = false
     var pendingTransaction: Transaction? = nil
+    var fileDestinationURL: URL?
+    let documentInteractionController = UIDocumentInteractionController()
     
     @objc func fireTimer() {
         print("Timer fired!")
@@ -41,8 +54,15 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKSc
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let url = URL(string: "http://localhost:8080/apps/<Product Name>.html")!
-        //let url = URL(string: "http://localhost:3000/apps/colors")!
+        let testWith3000 = true
+        let url: URL!
+        if !testWith3000 {
+            url = URL(string: "http://localhost:8080/apps/bsafes.html")!
+            localHost = "http://localhost:8080"
+        } else {
+            url = URL(string: "http://localhost:3000/apps/bsafes")!
+            localHost = "http://localhost:3000"
+        }
         webView.load(URLRequest(url: url))
     }
 
@@ -114,28 +134,126 @@ class ViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKSc
         }
     }
     
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, preferences: WKWebpagePreferences, decisionHandler: @escaping (WKNavigationActionPolicy, WKWebpagePreferences) -> Void) {
+        if navigationAction.shouldPerformDownload {
+            decisionHandler(.download, preferences)
+            return
+        }
         if navigationAction.navigationType == .linkActivated  {
             if let url = navigationAction.request.url {
-                let path = url.path
-                if path == "/external/payment" {
-                    let bsafesHost = "https://v2.bsafes.com"
-                    let externalURL = URL(string: "\(bsafesHost)/logIn?toPath=/services/payment")
-                    guard (externalURL != nil) else {
-                        return
-                    }
-                    UIApplication.shared.open(externalURL!)
-                    decisionHandler(.cancel)
+                if let host = url.host, !host.hasPrefix("v2.bsafes.com"), !host.hasPrefix("www.bsafes.com"), !host.hasPrefix("bsafes.com") {
+                    UIApplication.shared.open(url)
+                    decisionHandler(.cancel, preferences)
                     return
                 } else {
-                    decisionHandler(.allow)
-                    return
+                    let path = url.path
+                    if path == "/external/payment" {
+                        let bsafesHost = "https://v2.bsafes.com"
+                        let externalURL = URL(string: "\(bsafesHost)/logIn?toPath=/services/payment")
+                        guard (externalURL != nil) else {
+                            return
+                        }
+                        UIApplication.shared.open(externalURL!)
+                        decisionHandler(.cancel,preferences)
+                        return
+                    } else {
+                        if let host = url.host, !host.hasPrefix("localhost") {
+                            let path = url.path
+                            let internalURL = URL(string: "\(localHost!)\(path)")
+                            guard (internalURL != nil) else {
+                                return
+                            }
+                            webView.load(URLRequest(url: internalURL!))
+                            decisionHandler(.cancel, preferences)
+                        } else {
+                            decisionHandler(.allow, preferences)
+                        }
+                        return
+                    }
                 }
             }
         } else {
             print("not a user link")
-            decisionHandler(.allow)
+            decisionHandler(.allow, preferences)
             return
+        }
+    }
+    
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        if navigationResponse.canShowMIMEType {
+            decisionHandler(.allow)
+        } else {
+            decisionHandler(.download)
+        }
+    }
+    
+    func webView(_ webView: WKWebView, navigationAction: WKNavigationAction, didBecome download: WKDownload) {
+        download.delegate = self
+    }
+
+    func download(_ download: WKDownload, decideDestinationUsing
+                  response: URLResponse, suggestedFilename: String,
+                  completionHandler: @escaping (URL?) -> Void) {
+        let script = "window.bsafesNative.iOSActivityWebCall({activity:1})"
+        
+        webView.evaluateJavaScript(script) { (result, error) in
+            if let result = result {
+                print("Javascript retures: \(result)")
+            } else if let error = error {
+                print("A javascript error occurred: \(error)")
+            }
+        }
+        let tempDirectory = FileManager.default.temporaryDirectory
+        let tempFolderName = UUID().uuidString
+        let tempDirectoryPath = tempDirectory.appendingPathComponent(tempFolderName, isDirectory:true)
+        do {
+            try FileManager.default.createDirectory(at: tempDirectoryPath, withIntermediateDirectories: false)
+        } catch {
+            debugPrint(error)
+            return
+        }
+        let url = tempDirectoryPath.appendingPathComponent(suggestedFilename, isDirectory: false)
+        fileDestinationURL = url
+        completionHandler(url)
+    }
+    
+    func download(_ download: WKDownload, didFailWithError error: Error, resumeData: Data?) {
+        print(error)
+    }
+    
+    func share(_ url: URL) {
+        documentInteractionController.url = url
+        documentInteractionController.uti = url.typeIdentifier ?? "public.data, public.content"
+        documentInteractionController.name = url.localizedName ?? url.lastPathComponent
+        documentInteractionController.presentOptionsMenu(from: view.frame, in: view, animated: true)
+        documentInteractionController.delegate = self
+    }
+    
+    
+    func documentInteractionControllerDidDismissOptionsMenu(_ controller: UIDocumentInteractionController) {
+        print("documentInteractionController dismisssed")
+        if let url = fileDestinationURL {
+            do {
+                try FileManager.default.removeItem(at: url)
+                let script = "window.bsafesNative.iOSActivityWebCall({activity:0})"
+                
+                webView.evaluateJavaScript(script) { (result, error) in
+                    if let result = result {
+                        print("Javascript retures: \(result)")
+                    } else if let error = error {
+                        print("A javascript error occurred: \(error)")
+                    }
+                }
+            } catch {
+                debugPrint(error)
+                return
+            }
+        }
+    }
+    
+    func downloadDidFinish(_ download: WKDownload) {
+        if let url = fileDestinationURL {
+            share(url)
         }
     }
     
