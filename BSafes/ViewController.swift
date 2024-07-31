@@ -29,25 +29,47 @@ class ViewController: UIViewController, WKNavigationDelegate, WKDownloadDelegate
     var fileDestinationURL: URL?
     let documentInteractionController = UIDocumentInteractionController()
     
+    func addWebView() {
+        let webViewConfiguration = WKWebViewConfiguration();
+        webViewConfiguration.limitsNavigationsToAppBoundDomains = true;
+        self.webView = WKWebView(frame: .zero, configuration: webViewConfiguration)
+        self.webView.autoresizingMask = [.flexibleWidth, .flexibleHeight ]
+        self.webView.navigationDelegate = self
+        self.webView.uiDelegate = self
+        //webView.isInspectable = true
+        let contentController = self.webView.configuration.userContentController
+        contentController.add(self, name: "toggleMessageHandler")
+        self.view = self.webView
+        let testWith3000 = true
+        let url: URL!
+        if !testWith3000 {
+            url = URL(string: "http://localhost:8080/apps/bsafes.html")!
+            self.localHost = "http://localhost:8080"
+        } else {
+            url = URL(string: "http://localhost:3000/apps/bsafes")!
+            self.localHost = "http://localhost:3000"
+        }
+        self.webView.load(URLRequest(url: url))
+    }
+    
     @objc func fireTimer() {
         print("Timer fired!")
         if appLoaded == false {
             webView?.reload();
-        } else {
-            timer.invalidate();
+        }
+        let script = "window.bsafesNative.pingFromNative();"
+        webView.evaluateJavaScript(script) { (result, error) in
+            if let result = result {
+                print("pingFromNative result: \(result)")
+            } else if let error = error {
+                print("An error occurred: \(error)")
+                self.addWebView()
+            }
         }
     }
     
     override func loadView() {
-        let webViewConfiguration = WKWebViewConfiguration();
-        webViewConfiguration.limitsNavigationsToAppBoundDomains = true;
-        webView = WKWebView(frame: .zero, configuration: webViewConfiguration)
-        webView.navigationDelegate = self
-        webView.uiDelegate = self
-        webView.isInspectable = true
-        let contentController = webView.configuration.userContentController
-        contentController.add(self, name: "toggleMessageHandler")
-        view = webView
+        addWebView()
         timer = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
     }
     
